@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="ab0c9002-f0a5-45c0-b70f-5b07ed9bad76" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+<<<<<<< Updated upstream
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/snow.js" afterPath="$PROJECT_DIR$/snow.js" />
+=======
+>>>>>>> Stashed changes
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -208,7 +211,13 @@
       <updated>1512467997523</updated>
       <workItem from="1512467998600" duration="158000" />
       <workItem from="1512522992760" duration="2653000" />
+<<<<<<< Updated upstream
       <workItem from="1512537305065" duration="9141000" />
+=======
+      <workItem from="1512537305065" duration="11853000" />
+      <workItem from="1512551187385" duration="430000" />
+      <workItem from="1512552190668" duration="930000" />
+>>>>>>> Stashed changes
     </task>
     <task id="LOCAL-00001" summary="接触对jquery的依赖，针对canvas大小配置数值/百分比进行修改，单个雪花方法提出来控制">
       <created>1512540453517</created>
@@ -224,11 +233,40 @@
       <option name="project" value="LOCAL" />
       <updated>1512544506186</updated>
     </task>
+<<<<<<< Updated upstream
     <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="11952000" />
+=======
+    <task id="LOCAL-00003" summary="修改渲染流程，将事件监听和重置位置合并在一起，减少循环和监听次数">
+      <created>1512546503919</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1512546503919</updated>
+    </task>
+    <task id="LOCAL-00004" summary="修改渲染流程，将事件监听和重置位置合并在一起，减少循环和监听次数">
+      <created>1512551204343</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1512551204343</updated>
+    </task>
+    <task id="LOCAL-00005" summary="梳理一下整个流程">
+      <created>1512553076455</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1512553076455</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="16024000" />
+>>>>>>> Stashed changes
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -260,7 +298,13 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="接触对jquery的依赖，针对canvas大小配置数值/百分比进行修改，单个雪花方法提出来控制" />
     <MESSAGE value="添加鼠标触碰事件" />
+<<<<<<< Updated upstream
     <option name="LAST_COMMIT_MESSAGE" value="添加鼠标触碰事件" />
+=======
+    <MESSAGE value="修改渲染流程，将事件监听和重置位置合并在一起，减少循环和监听次数" />
+    <MESSAGE value="梳理一下整个流程" />
+    <option name="LAST_COMMIT_MESSAGE" value="梳理一下整个流程" />
+>>>>>>> Stashed changes
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
