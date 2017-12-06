@@ -90,12 +90,12 @@ SnowHandler.prototype.resetSnowsList = function (index) {
 }
 /************
  * 创建一个雪花数据
- * 参数 true： Y为随机数， false： Y为1
+ * 参数 true： Y为随机数， false： Y为 -雪花高度
  */
 SnowHandler.prototype.createSnowJson = function (options) {
-    var yVal = options ? parseInt(Math.random() * (this.settings.height - 1)) + 1 : 1
     var randomWidth = (Math.random() * 0.75 + 0.5) * this.settings.imgWidth,
-        rendomHeight = this.settings.imgHeight / this.settings.imgWidth * randomWidth
+        rendomHeight = this.settings.imgHeight / this.settings.imgWidth * randomWidth,
+        yVal = options ? parseInt(Math.random() * (this.settings.height - 1)) + 1 : -rendomHeight
     return {
         x: parseInt(Math.random() * (this.settings.width - 50)) + 50,
         y: yVal,
@@ -136,39 +136,46 @@ SnowHandler.prototype.drawImagePosition = function () {
  ************************************/
 SnowHandler.prototype.initMoveHandler = function () {
     var _this = this
+    var opt = {}
+    this.settings.canvas.addEventListener('mousemove', function (e) {
+        opt.mouseX = e.clientX - _this.settings.canvas.getBoundingClientRect().left,
+        opt.mouseY = e.clientY - _this.settings.canvas.getBoundingClientRect().top,
+        opt.event = e
+    })
     var intervalTimer = setInterval(function () {
-        _this.initMoveTimer()
+        _this.initMoveTimer(opt)
     }, 1000 / 60)
 }
 /**************
  * 定时运动
  */
-SnowHandler.prototype.initMoveTimer = function () {
+SnowHandler.prototype.initMoveTimer = function (opt) {
     this.ctx.clearRect(0, 0, this.settings.width, this.settings.height)
-    this.resetMovePosition()
-    this.mouseMovePosition()
+    this.resetMovePosition(opt)
     this.drawImagePosition()
 }
 /**************
  * 每次运动时位置的重置
  */
-SnowHandler.prototype.resetMovePosition = function () {
+SnowHandler.prototype.resetMovePosition = function (opt) {
+
     for (var i = 0; i < this.snowsList.length; i++) {
         var snowItem = this.snowsList[i]
         snowItem.step += .05
         /***
          * 设置雪花位置
          */
-        snowItem.x -= snowItem.stepSize + Math.cos(snowItem.step * 0.1)
+        snowItem.x -= snowItem.stepSize + Math.cos(snowItem.step * 0.02)
         snowItem.y +=  snowItem.stepSize + Math.abs(Math.cos(snowItem.step * 0.2))
 
+        this.mouseMovePosition(snowItem, opt)
         /***
          * 判断是否为鼠标触摸雪花
          */
         if (snowItem.touch > 0) {
-            snowItem.touch -= 0.05
-            var xVal = (snowItem.touchX > 0) ? snowItem.touch * 0.2 : -snowItem.touch * 0.2,
-                yVal = (snowItem.touchY > 0) ? snowItem.touch * 0.2 : -snowItem.touch * 0.2
+            snowItem.touch -= 0.2
+            var xVal = (snowItem.touchX > 0) ? -snowItem.touch * 0.2 : snowItem.touch * 0.2,
+                yVal = (snowItem.touchY > 0) ? -snowItem.touch * 0.2 : snowItem.touch * 0.2
             snowItem.x += xVal
             snowItem.y += yVal
         }
@@ -176,7 +183,7 @@ SnowHandler.prototype.resetMovePosition = function () {
         /*****
          * 进入边缘，删除并重新生成一个
          */
-        if (snowItem.x < 0 || snowItem.y > this.settings.height) {
+        if ((snowItem.x + snowItem.width) < 0 || (snowItem.y - snowItem.height) > this.settings.height) {
             this.resetSnowsList(i)
         }
     }
@@ -184,26 +191,19 @@ SnowHandler.prototype.resetMovePosition = function () {
 /***************
  * 控制鼠标接近时的响应位移
  */
-SnowHandler.prototype.mouseMovePosition = function () {
+SnowHandler.prototype.mouseMovePosition = function (snowItem, opt) {
     var _this = this
-    this.settings.canvas.addEventListener('mousemove', function (e) {
-        var mouseX = e.clientX - _this.settings.canvas.getBoundingClientRect().left,
-            mouseY = e.clientY - _this.settings.canvas.getBoundingClientRect().top,
-            snowX,
-            snowY,
-            distance;
-        for (var i = 0; i < _this.snowsList.length; i++) {
-            var snowItem = _this.snowsList[i]
-            snowX = snowItem.width / 2 + snowItem.x
-            snowY = snowItem.height / 2 + snowItem.y
-            distance = Math.sqrt((mouseX - snowX) * (mouseX - snowX) + (mouseY - snowY) * (mouseY - snowY))
-            if (distance < 30) {
-                snowItem.touch = 10
-                snowItem.touchX = mouseX - snowX
-                snowItem.touchY = mouseY - snowY
-            }
+    var mouseX = opt.mouseX,
+        mouseY = opt.mouseY,
+        snowX = snowItem.width / 2 + snowItem.x,
+        snowY = snowItem.height / 2 + snowItem.y,
+        distance = Math.sqrt((mouseX - snowX) * (mouseX - snowX) + (mouseY - snowY) * (mouseY - snowY));
+
+        if (distance < 30 && snowItem.touch <= 0) {
+            snowItem.touch = 10
+            snowItem.touchX = mouseX - snowX
+            snowItem.touchY = mouseY - snowY
         }
-    })
 }
 
 /****************************
