@@ -65,7 +65,6 @@ SnowHandler.prototype.domGetValue = function (val, attr) {
     }
 }
 
-
 /************************************
  * 雪花列表控制
  ************************************/
