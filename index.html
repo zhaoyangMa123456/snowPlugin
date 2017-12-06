@@ -14,16 +14,16 @@
     }
   </style>
   <div id="banner">
-    <canvas width="1000" height="200" class="flake"></canvas>
+    <canvas id="snow-container"></canvas>
   </div>
-  <script src="http://mazhaoyang.cn/Public/Blog/libs/jquery.min.js"></script>
   <script src="snow.js"></script>
   <script>
-
-      $("canvas.flake").snow({
-          count: 10,
-          image: "http://mazhaoyang.cn/Public/Blog/src/images/white-snowflake.png"
-      });
+    var snowContainer = document.getElementById('snow-container')
+    new SnowHandler({
+        canvas: snowContainer,
+        count: 20,
+        image: "http://mazhaoyang.cn/Public/Blog/src/images/white-snowflake.png"
+    })
   </script>
   </body>
 </html>
