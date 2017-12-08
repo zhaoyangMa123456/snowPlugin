@@ -21,19 +21,24 @@ function SnowHandler(options) {
         imgWidth: 30,   // 雪花宽
         imgHeight: 30,  // 雪花高
         image: '',   // 雪花路径，必填 *
-        cloudImage: 'http://mazhaoyang.cn/Public/Blog/src/images/cloud1.png'
+        cloudImage: 'http://mazhaoyang.cn/Public/Blog/src/images/cloud1.png',    // 云朵图片
+        wheelImage: 'http://mazhaoyang.cn/Public/Blog/src/images/lunzi.png',      // 轮子图片
+        mechineImage: 'http://mazhaoyang.cn/Public/Blog/src/images/banner-bbg2.png'  // 机器图片
     }
     var settings = this.extend(_default, options)
     this.snowsList = []    // 雪花数据列表
     this.cloudList = []     // 云朵数据列表
     this.triangleList = []  // 三角形列表
+    this.wheelList = []     // 轮子列表
+    this.machinelList = []  // 机器列表
     this.triangleTime = 60   //  三角形计时
     this.triangleRandom = 0  // 三角形随机数
     this.settings = settings   // 配置设置
     this.ctx = settings.canvas.getContext("2d") // canvas的context
     this.imgSnow=new Image()    // 雪花图片
     this.imgCloud=new Image()    // 云朵图片
-    this.imageCount = 0         // 图片预加载完成数
+    this.imgWheel=new Image()    // 轮子图片
+    this.imgMechine=new Image()    // 机器图片
 
     /*********
      * 初始化
@@ -82,8 +87,10 @@ SnowHandler.prototype.domGetValue = function (val, attr) {
  ************************************/
 SnowHandler.prototype.initDataListHandler = function () {
     this.snowsListHandler()
+    this.MachineListHandler()
     this.cloudListHandler()
     this.triangleListHandler()
+    this.wheelListHandler()
 }
 
 /************************************
@@ -300,6 +307,52 @@ SnowHandler.prototype.triangleListHandler = function () {
     ]
 }
 
+/*************************************
+ *          轮子列表数据
+ ************************************/
+SnowHandler.prototype.wheelListHandler = function () {
+    this.wheelList = [
+        {
+            x: this.settings.width / 2 + 100,
+            y: 70,
+            width: 50,
+            height: 50,
+            rotate: 0,
+            speed: 1
+        },
+        {
+            x: this.settings.width / 2 - 23,
+            y: 44,
+            width: 30,
+            height: 30,
+            rotate: 0,
+            speed: 2
+        },
+        {
+            x: this.settings.width / 2 + 40,
+            y: 206,
+            width: 40,
+            height: 40,
+            rotate: 0,
+            speed: 2
+        }
+    ]
+}
+
+/*************************************
+ *          机器数据
+ ************************************/
+SnowHandler.prototype.MachineListHandler = function () {
+    this.machinelList = [
+        {
+            x: this.settings.width / 2 - 200,
+            y: 0,
+            width: 955,
+            height: 259
+        }
+    ]
+}
+
 
 
 /*******************************************************************************************************************
@@ -310,14 +363,18 @@ SnowHandler.prototype.triangleListHandler = function () {
  ****************************************/
 SnowHandler.prototype.initDrawImageHandler = function () {
     this.drawTriangleHandler()
-    this.drawSnowHandler()
+    this.drawMachineHandler()
+    this.drawWheelHandler()
     this.drawCloudHandler()
+    this.drawSnowHandler()
 }
 /****************
  * 重绘图片画图
  */
 SnowHandler.prototype.reDrawImageHandler = function () {
     this.drawTriangleHandler()
+    this.drawMechinePosition()
+    this.drawWheelPosition()
     this.drawSnowPosition()
     this.drawCloudPosition()
 }
@@ -351,7 +408,7 @@ SnowHandler.prototype.drawCloudHandler = function () {
     }
 }
 /****************
- * 雪花图片位置渲染
+ * 云朵图片位置渲染
  */
 SnowHandler.prototype.drawCloudPosition = function () {
     for (var i = 0; i < this.cloudList.length; i ++) {
@@ -374,6 +431,50 @@ SnowHandler.prototype.drawTriangleHandler = function () {
     }
 }
 
+/****************************************
+ *               轮子画图
+ ****************************************/
+SnowHandler.prototype.drawWheelHandler = function () {
+    var _this = this
+    this.imgWheel.src= this.settings.wheelImage
+    this.imgWheel.onload = function () {
+        _this.drawWheelPosition()
+    }
+}
+/***************
+ * 轮子图片渲染
+ */
+SnowHandler.prototype.drawWheelPosition = function () {
+    for (var i = 0; i < this.wheelList.length; i ++) {
+        var wheelItem = this.wheelList[i]
+        this.ctx.save();
+        this.ctx.translate(wheelItem.x, wheelItem.y);
+        this.ctx.rotate(wheelItem.rotate*Math.PI/180);
+        this.ctx.drawImage(this.imgWheel,-wheelItem.width/2,-wheelItem.height/2, wheelItem.width, wheelItem.height);
+        this.ctx.restore();
+    }
+}
+
+/****************************************
+ *               机器画图
+ ****************************************/
+SnowHandler.prototype.drawMachineHandler = function () {
+    var _this = this
+    this.imgMechine.src= this.settings.mechineImage
+    this.imgMechine.onload = function () {
+        _this.drawMechinePosition()
+    }
+}
+/***************
+ * 机器图片渲染
+ */
+SnowHandler.prototype.drawMechinePosition = function () {
+    for (var i = 0; i < this.machinelList.length; i ++) {
+        this.ctx.save();
+        this.ctx.drawImage(this.imgMechine, this.machinelList[i].x, this.machinelList[i].y , this.machinelList[i].width, this.machinelList[i].height);
+        this.ctx.restore();
+    }
+}
 
 
 /*******************************************************************************************************************
@@ -383,10 +484,7 @@ SnowHandler.prototype.drawTriangleHandler = function () {
  *          初始化运动控制
  ************************************/
 SnowHandler.prototype.initMoveHandler = function () {
-    this.imageCount ++
-    if (this.imageCount === 1) {
-        this.startMoveHandler()
-    }
+   this.startMoveHandler()
 }
 /***********************
  * 创建鼠标事件监听，并开启定时
@@ -413,6 +511,7 @@ SnowHandler.prototype.resetMovePosition = function (opt) {
     this.resetSnowMovePosition(opt)
     this.resetCloudMovePosition(opt)
     this.resetTriangleMovePosition()
+    this.resetWheelMovePosition()
 }
 /**************
  * 雪花运动位置的重置
@@ -518,6 +617,21 @@ SnowHandler.prototype.resetTriangleMovePosition = function () {
             this.triangleList[i].color = this.triangleList[i].reColor
         }
         this.triangleList[this.triangleRandom].color = '#6dd8e2'
+    }
+}
+
+/***************
+ * 轮子角度重置
+ */
+SnowHandler.prototype.resetWheelMovePosition = function () {
+    var len = this.wheelList.length
+    for (var i = 0; i < len; i++) {
+        var wheelItem = this.wheelList[i]
+        if (wheelItem.rotate <= 360) {
+            wheelItem.rotate += wheelItem.speed
+        } else {
+            wheelItem.rotate = 0
+        }
     }
 }
 
