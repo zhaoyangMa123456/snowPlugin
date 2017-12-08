@@ -26,6 +26,9 @@ function SnowHandler(options) {
     var settings = this.extend(_default, options)
     this.snowsList = []    // 雪花数据列表
     this.cloudList = []     // 云朵数据列表
+    this.triangleList = []  // 三角形列表
+    this.triangleTime = 60   //  三角形计时
+    this.triangleRandom = 0  // 三角形随机数
     this.settings = settings   // 配置设置
     this.ctx = settings.canvas.getContext("2d") // canvas的context
     this.imgSnow=new Image()    // 雪花图片
@@ -80,6 +83,7 @@ SnowHandler.prototype.domGetValue = function (val, attr) {
 SnowHandler.prototype.initDataListHandler = function () {
     this.snowsListHandler()
     this.cloudListHandler()
+    this.triangleListHandler()
 }
 
 /************************************
@@ -158,7 +162,7 @@ SnowHandler.prototype.cloudListHandler = function () {
         },
         {
             x: 1800,
-            y: this.settings.height - 47,
+            y: this.settings.height - 80,
             step: 0,
             touch: 0,
             touchX: 0,
@@ -168,6 +172,136 @@ SnowHandler.prototype.cloudListHandler = function () {
     ]
 }
 
+/*************************************
+ *          三角形列表数据
+ ************************************/
+SnowHandler.prototype.triangleListHandler = function () {
+    this.triangleList = [
+        {
+            x1: 96,
+            y1: 57,
+            x2: 136,
+            y2: 60,
+            x3: 110,
+            y3: 94,
+            color: '#87d1eb',
+            reColor: '#87d1eb'
+        },
+        {
+            x1: 159,
+            y1: 28,
+            x2: 136,
+            y2: 60,
+            x3: 174,
+            y3: 65,
+            color: '#87d1eb',
+            reColor: '#87d1eb'
+        },
+        {
+            x1: 174,
+            y1: 65,
+            x2: 214,
+            y2: 69,
+            x3: 192,
+            y3: 101,
+            color: '#87d1eb',
+            reColor: '#87d1eb'
+        },
+        {
+            x1: 192,
+            y1: 101,
+            x2: 167,
+            y2: 135,
+            x3: 207,
+            y3: 139,
+            color: '#80c5d1',
+            reColor: '#80c5d1'
+        },
+        {
+            x1: 127,
+            y1: 129,
+            x2: 167,
+            y2: 135,
+            x3: 143,
+            y3: 167,
+            color: '#87d1eb',
+            reColor: '#87d1eb'
+        },
+        {
+            x1: 88,
+            y1: 126,
+            x2: 127,
+            y2: 129,
+            x3: 110,
+            y3: 94,
+            color: '#8dd6e2',
+            reColor: '#8dd6e2'
+        },
+        {
+            x1: 110,
+            y1: 94,
+            x2: 127,
+            y2: 129,
+            x3: 151,
+            y3: 96,
+            color: '#6dd8e2',
+            reColor: '#87d1eb'
+        },
+        {
+            x1: 127,
+            y1: 129,
+            x2: 167,
+            y2: 135,
+            x3: 151,
+            y3: 96,
+            color: '#8dd6e2',
+            reColor: '#8dd6e2'
+        },
+        {
+            x1: 167,
+            y1: 135,
+            x2: 192,
+            y2: 101,
+            x3: 151,
+            y3: 96,
+            color: '#87d1eb',
+            reColor: '#87d1eb'
+        },
+        {
+            x1: 192,
+            y1: 101,
+            x2: 174,
+            y2: 65,
+            x3: 151,
+            y3: 96,
+            color: '#8dd6e2',
+            reColor: '#8dd6e2'
+        },
+        {
+            x1: 136,
+            y1: 60,
+            x2: 174,
+            y2: 65,
+            x3: 151,
+            y3: 96,
+            color: '#89d9f3',
+            reColor: '#89d9f3'
+        },
+        {
+            x1: 136,
+            y1: 60,
+            x2: 110,
+            y2: 94,
+            x3: 151,
+            y3: 96,
+            color: '#8dd6e2',
+            reColor: '#8dd6e2'
+        },
+    ]
+}
+
+
+
 /*******************************************************************************************************************
  *                                              图片画图控制
  *******************************************************************************************************************/
@@ -175,6 +309,7 @@ SnowHandler.prototype.cloudListHandler = function () {
  *               初始化图片画图
  ****************************************/
 SnowHandler.prototype.initDrawImageHandler = function () {
+    this.drawTriangleHandler()
     this.drawSnowHandler()
     this.drawCloudHandler()
 }
@@ -182,6 +317,7 @@ SnowHandler.prototype.initDrawImageHandler = function () {
  * 重绘图片画图
  */
 SnowHandler.prototype.reDrawImageHandler = function () {
+    this.drawTriangleHandler()
     this.drawSnowPosition()
     this.drawCloudPosition()
 }
@@ -195,7 +331,6 @@ SnowHandler.prototype.drawSnowHandler = function () {
     this.imgSnow.onload = function () {
         _this.drawSnowPosition()
     }
-
 }
 /****************
  * 雪花图片位置渲染
@@ -224,6 +359,21 @@ SnowHandler.prototype.drawCloudPosition = function () {
     }
 }
 
+/****************************************
+ *               三角形画图
+ ****************************************/
+SnowHandler.prototype.drawTriangleHandler = function () {
+    for (var i = 0; i < this.triangleList.length; i ++) {
+        var triangleItem = this.triangleList[i]
+        this.ctx.beginPath()
+        this.ctx.moveTo(triangleItem.x1, triangleItem.y1)
+        this.ctx.lineTo(triangleItem.x2, triangleItem.y2)
+        this.ctx.lineTo(triangleItem.x3, triangleItem.y3)
+        this.ctx.fillStyle = triangleItem.color
+        this.ctx.fill();
+    }
+}
+
 
 
 /*******************************************************************************************************************
@@ -244,7 +394,7 @@ SnowHandler.prototype.initMoveHandler = function () {
 SnowHandler.prototype.startMoveHandler = function () {
     var _this = this
     var opt = {}
-    this.settings.canvas.addEventListener('mousemove', function (e) {
+    document.documentElement.addEventListener('mousemove', function (e) {
         opt.mouseX = e.clientX - _this.settings.canvas.getBoundingClientRect().left
         opt.mouseY = e.clientY - _this.settings.canvas.getBoundingClientRect().top
         opt.event = e
@@ -262,6 +412,7 @@ SnowHandler.prototype.startMoveHandler = function () {
 SnowHandler.prototype.resetMovePosition = function (opt) {
     this.resetSnowMovePosition(opt)
     this.resetCloudMovePosition(opt)
+    this.resetTriangleMovePosition()
 }
 /**************
  * 雪花运动位置的重置
@@ -353,6 +504,22 @@ SnowHandler.prototype.mouseMoveCloudPosition = function (item, opt) {
 
 }
 
+/**************
+ * 三角形颜色的重置
+ */
+SnowHandler.prototype.resetTriangleMovePosition = function () {
+    var len = this.triangleList.length
+    if (this.triangleTime > 0) {
+        this.triangleTime -= 1
+    } else {
+        this.triangleTime = 60
+        this.triangleRandom = parseInt(Math.random() * len)
+        for (var i = 0; i < len; i++) {
+            this.triangleList[i].color = this.triangleList[i].reColor
+        }
+        this.triangleList[this.triangleRandom].color = '#6dd8e2'
+    }
+}
 
 /****************************
  *          工具方法
