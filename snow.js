@@ -313,7 +313,7 @@ SnowHandler.prototype.triangleListHandler = function () {
 SnowHandler.prototype.wheelListHandler = function () {
     this.wheelList = [
         {
-            x: this.settings.width / 2 + 100,
+            x: this.settings.width / 2 - 100,
             y: 70,
             width: 50,
             height: 50,
@@ -321,16 +321,16 @@ SnowHandler.prototype.wheelListHandler = function () {
             speed: 1
         },
         {
-            x: this.settings.width / 2 - 23,
-            y: 44,
+            x: this.settings.width / 2 - 223,
+            y: 46,
             width: 30,
             height: 30,
             rotate: 0,
             speed: 2
         },
         {
-            x: this.settings.width / 2 + 40,
-            y: 206,
+            x: this.settings.width / 2 - 160,
+            y: 210,
             width: 40,
             height: 40,
             rotate: 0,
@@ -345,7 +345,7 @@ SnowHandler.prototype.wheelListHandler = function () {
 SnowHandler.prototype.MachineListHandler = function () {
     this.machinelList = [
         {
-            x: this.settings.width / 2 - 200,
+            x: this.settings.width / 2 - 400,
             y: 0,
             width: 955,
             height: 259
